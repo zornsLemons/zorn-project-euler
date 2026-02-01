@@ -1,2 +1,4 @@
 # zorn-project-euler
-I solve project Euler problems (poorly)
+Wherein I solve project Euler problems (poorly)
+[projecteuler](https://projecteuler.net/)
+
