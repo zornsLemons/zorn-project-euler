@@ -1,22 +1,48 @@
 // The prime factors of 13195 are 5, 7, 13 and 29
 // What is the largest prime factor of the number 600851475143?
 // Solution: Prime facotrization is at the center of RSA for a damn REASON. Not a lot to do here except do it the hard way.
-// We could do this by reading from a text file that we populate with prime numbers up to n/2 but like...that feels like cheating and
-// not really what I want ot do even though it's easier. Instead, I'm going to just the test division method and see if I can come up with
-// any cute ways to cut down the search space as we go.
-//
-// We're going use a binary tree data structure.
+// We're going to generate all primes up to sqrt(N) using the Sieeve of eratosthenes and then do Trial division.
 package main
 
+import (
+	"fmt"
+	"math"
+	"time"
+)
+
 func main() {
+	// testing
+	start := time.Now()
+	N := 600851475143
+	K := int(math.Ceil(math.Sqrt(float64(N))))
+	candidatePrimes := GenPrimesBelowK(K)
+	for i := len(candidatePrimes) - 1; i >= 0; i-- {
+		if N%candidatePrimes[i] == 0 {
+			fmt.Println("largest factor is:", candidatePrimes[i])
+			break
+		}
+	}
+	duration := time.Since(start)
+	fmt.Println("ran in: ", duration)
 }
 
-// this is our factor tree data structure.
-type Node struct {
-	value uint
-	left  *Node
-	right *Node
-}
-
-func factor(number uint) (uint, uint) {
+func GenPrimesBelowK(K int) []int {
+	primes := make([]bool, K+1)
+	for i := 2; i <= K; i++ {
+		primes[i] = true
+	}
+	for p := 2; p*p < K; p++ {
+		if primes[p] {
+			for j := p * p; j <= K; j += p {
+				primes[j] = false
+			}
+		}
+	}
+	var primeNumbers []int
+	for p, val := range primes {
+		if val {
+			primeNumbers = append(primeNumbers, p)
+		}
+	}
+	return primeNumbers
 }
