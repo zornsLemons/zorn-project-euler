@@ -1,7 +1,11 @@
 // The prime factors of 13195 are 5, 7, 13 and 29
 // What is the largest prime factor of the number 600851475143?
 // Solution: Prime facotrization is at the center of RSA for a damn REASON. Not a lot to do here except do it the hard way.
-// We're going to generate all primes up to sqrt(N) using the Sieeve of eratosthenes and then do Trial division.
+// I generate all primes up to sqrt(N) using the sieve of eratosthenes the sieve algo gives me an ordered list of primes and Since
+// I only want the largest prime divisor of N and don't care about the other factors, I loop backward through the slice of primes and
+// simply print then first one that evenly divides N.
+// this will eat all available memory on the planet for large N.
+
 package main
 
 import (
