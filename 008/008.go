@@ -28,10 +28,10 @@
 // we dont need to store the sub slices or  products of ubslices in memory.
 // instead we need to only store the biggest one so far as we loop over the big int slice.
 //
-// TODO: the current code is slow becasue I'm calculating the full array product at each step. There is a way
-// TODO: to make this fast by only calculating array products when I have to and getting the next product by
-// TODO: dividng the last product by first element of it's subsequence and multiplying by the first element outside
-// TODO: the sub sequence. I tried this first but there are some details that aren't working.
+//	the first code was slow becasue I'm calculating the full array product at each step. I make this fast by only
+//	calculating array products when the leading digit is a 0 and when it isn't I get the next product by
+//	dividng the last product by first element of it's subsequence and multiplying by the first element outside
+//	the sub sequence.
 package main
 
 import (
@@ -45,24 +45,20 @@ func main() {
 
 	bigInt := bigNumberHandler(filepath)
 	fmt.Println(len(bigInt))
-	fmt.Println(bigInt[:10])
+	fmt.Println(bigInt[:13])
 	biggestProduct := arrayProduct(bigInt[0:13])
 	fmt.Println(len(bigInt[0:13]))
 	// candidate := biggestProduct
 	var candidate int
 	// var bigSlice []int
 	for i := 0; i+15 < len(bigInt); i++ {
-		// if bigInt[i] == 0 {
-		candidate = arrayProduct(bigInt[i+1 : i+14])
-		// continue
-		// }
-		// if (candidate/bigInt[i])*bigInt[i+14] > biggestProduct {
-		// 	candidate = (candidate / bigInt[i]) * bigInt[i+14]
-		// 	bigSlice = bigInt[i+1 : i+14]
-		// 	biggestProduct = (candidate / bigInt[i]) * bigInt[i+14]
-		// }
-
-		// candidate = (candidate / bigInt[i]) * bigInt[i+14]
+		switch bigInt[i] {
+		case 0:
+			candidate = arrayProduct(bigInt[i+1 : i+14])
+		default:
+			candidate = (candidate * bigInt[i+13]) / bigInt[i]
+		}
+		// candidate = arrayProduct(bigInt[i+1 : i+14])
 		if candidate >= biggestProduct {
 			biggestProduct = candidate
 		}
